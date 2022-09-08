@@ -1,4 +1,4 @@
-# secureappbox-assignment
+# test-assignment
 
 ## Project setup
 ```
