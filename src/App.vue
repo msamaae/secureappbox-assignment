@@ -1,55 +1,150 @@
 <template>
 	<div id="app" class="wrapper">
-        <header class="header">
-            <div class="header__from">From: {{ msg.from }}</div>
-            <div class="header__to">To: {{ msg.to }}</div>
-            <div class="header__subject">Subject: {{ msg.subject }}</div>
-        </header>
-        <main class="container">
-            <div class="msg" v-html="'Body: ' + msg.body"></div>
-            <div class="conversation" v-for="(msg, key) in msg.conversationHistory" :key="key">
-                <div class="conversation__msg">
-                   {{ msg.from }}: {{ msg.body }}
-                </div>
-            </div>
-        </main>
-    </div>
+		<Header :message="messages" />
+		<Message :messages="messages.conversationHistory" />
+		<Action />
+	</div>
 </template>
 
 <script>
-import axios from 'axios'
+	import axios from 'axios';
+	import { eventBus } from '@/eventBus';
+
+	import Header from '@/components/Header.vue';
+	import Message from '@/components/Message.vue';
+	import Action from '@/components/Action.vue';
 
 	export default {
 		name: 'App',
+		components: {
+			Header,
+			Message,
+			Action,
+		},
 		data() {
 			return {
-				msg: [],
+				messages: [],
 			};
 		},
-        async mounted() {
-            try {
-                const { data } = await axios.get('http://sa-test-task-2022.s3-website.eu-north-1.amazonaws.com/messages');
-                this.msg = data;
-            } catch (error) {
-                console.error(error);
-                throw error;
-            }
+		created() {
+			eventBus.$on('delete-msg', id => this.deleteMsg(id));
+		},
+        beforeDestroy() {
+            eventBus.$off('delete-msg');
         },
-        computed: {
-            // msgBody() {
-            //     return this.msg.body.replace(/\[([^\][]+)]/g, "<$1>");
-            // }
-        }
+		async mounted() {
+			try {
+				const { data } = await axios.get(
+					'http://sa-test-task-2022.s3-website.eu-north-1.amazonaws.com/messages'
+				);
+				console.log(data);
+				this.messages = data;
+			} catch (error) {
+				console.error(error);
+				throw error;
+			}
+		},
+
+		methods: {
+			reply() {},
+            deleteMsg(id) {
+                const found = this.messages.conversationHistory.map(msg => msg.messageId).indexOf(id)
+                
+                this.messages.conversationHistory.splice(found, 1)
+            }
+		},
 	};
 </script>
 
 <style lang="scss">
+	* {
+		box-sizing: 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		padding: 1.25rem;
+	}
+
 	#app {
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		text-align: center;
+		/* text-align: center; */
 		color: #2c3e50;
 		margin-top: 60px;
+	}
+
+	.wrapper {
+		max-width: 45em;
+		padding: 1rem;
+		margin: 0 auto;
+		overflow-wrap: break-word;
+
+		& .header {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+
+			& span {
+				font-weight: bold;
+			}
+		}
+
+		& .msg-wrapper {
+			margin-top: 2rem;
+		}
+
+		& .msg-item {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.125);
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			margin-bottom: 1rem;
+			border-radius: 1rem;
+			padding: 1rem;
+
+			& span {
+				font-weight: bold;
+			}
+
+			&__from {
+				display: flex;
+				justify-content: space-between;
+
+				& .delete {
+					cursor: pointer;
+					color: firebrick;
+
+					&:hover {
+						color: rgb(218, 21, 21);
+					}
+				}
+			}
+		}
+
+		& .action {
+			padding: 0.5rem;
+
+			& button {
+				padding: 0.725rem 1.25rem;
+				margin-right: 1rem;
+				text-transform: uppercase;
+				font-weight: bold;
+				border: none;
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+				border-radius: 0.125rem;
+				background: #4361ee;
+				color: #fff;
+				letter-spacing: 0.125rem;
+				cursor: pointer;
+
+				&:hover {
+					background: #2a40a2;
+				}
+			}
+		}
 	}
 </style>
