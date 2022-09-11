@@ -9,7 +9,7 @@
 				<div class="msg-item__to"><span>To:</span> {{ msg.to }}</div>
 			</div>
 			<div class="msg-item__subject"><span>Subject:</span> {{ msg.subject }}</div>
-			<div class="msg-item__body" v-html="'<span>Body:</span>' + handleMsgBody(msg.body)"></div>
+			<div class="msg-item__body" v-html="'<span>Body: </span>' + handleMsgBody(msg.body)"></div>
 		</div>
 	</div>
 </template>

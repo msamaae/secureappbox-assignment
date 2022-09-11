@@ -2,7 +2,7 @@
 	<div id="app" class="wrapper">
 		<Header :message="messages" />
 		<Message :messages="messages.conversationHistory" />
-		<Form v-show="showForm" />
+		<Form v-if="showForm" :message="messages" />
 		<Action v-show="!showForm" />
 	</div>
 </template>
@@ -32,11 +32,15 @@
 		},
 		created() {
 			eventBus.$on('delete-msg', id => this.deleteMsg(id));
-			eventBus.$on('reply-msg', payload => this.showForm = payload);
+			eventBus.$on('reply-msg', msg => this.replyMsg(msg));
+			eventBus.$on('reply-btn', payload => this.showForm = payload);
+			eventBus.$on('close-form', payload => this.showForm = payload);
 		},
 		beforeDestroy() {
 			eventBus.$off('delete-msg');
 			eventBus.$off('reply-msg');
+			eventBus.$off('reply-btn');
+			eventBus.$off('close-form');
 		},
 		async mounted() {
 			try {
@@ -52,7 +56,9 @@
 		},
 
 		methods: {
-			reply() {},
+			replyMsg(msg) {
+                this.messages.conversationHistory.push(msg);
+            },
 			deleteMsg(id) {
 				const found = this.messages.conversationHistory.map(msg => msg.messageId).indexOf(id);
 

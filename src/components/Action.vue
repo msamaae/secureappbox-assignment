@@ -1,6 +1,6 @@
 <template>
 	<div class="action">
-		<button class="action__reply" @click="replyMsg">Reply</button>
+		<button class="action__reply" @click="handleReply">Reply</button>
 		<button class="action__forward" @click="forwardMsg">Forward</button>
 	</div>
 </template>
@@ -12,13 +12,12 @@
 		name: 'Action',
 		data() {
 			return {
-				reply: false,
                 forward: false
 			};
 		},
 		methods: {
-			replyMsg() {
-                eventBus.$emit('reply-msg',  this.reply = !this.reply);
+			handleReply() {
+                eventBus.$emit('reply-btn', true);
             },
             forwardMsg() {
                 
