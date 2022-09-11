@@ -2,7 +2,8 @@
 	<div id="app" class="wrapper">
 		<Header :message="messages" />
 		<Message :messages="messages.conversationHistory" />
-		<Action />
+		<Form v-show="showForm" />
+		<Action v-show="!showForm" />
 	</div>
 </template>
 
@@ -12,6 +13,7 @@
 
 	import Header from '@/components/Header.vue';
 	import Message from '@/components/Message.vue';
+	import Form from '@/components/Form.vue';
 	import Action from '@/components/Action.vue';
 
 	export default {
@@ -19,19 +21,23 @@
 		components: {
 			Header,
 			Message,
+			Form,
 			Action,
 		},
 		data() {
 			return {
 				messages: [],
+                showForm: false
 			};
 		},
 		created() {
 			eventBus.$on('delete-msg', id => this.deleteMsg(id));
+			eventBus.$on('reply-msg', payload => this.showForm = payload);
 		},
-        beforeDestroy() {
-            eventBus.$off('delete-msg');
-        },
+		beforeDestroy() {
+			eventBus.$off('delete-msg');
+			eventBus.$off('reply-msg');
+		},
 		async mounted() {
 			try {
 				const { data } = await axios.get(
@@ -47,11 +53,11 @@
 
 		methods: {
 			reply() {},
-            deleteMsg(id) {
-                const found = this.messages.conversationHistory.map(msg => msg.messageId).indexOf(id)
-                
-                this.messages.conversationHistory.splice(found, 1)
-            }
+			deleteMsg(id) {
+				const found = this.messages.conversationHistory.map(msg => msg.messageId).indexOf(id);
+
+				this.messages.conversationHistory.splice(found, 1);
+			},
 		},
 	};
 </script>
@@ -64,7 +70,7 @@
 	}
 
 	body {
-		padding: 1.25rem;
+		padding: 1rem;
 	}
 
 	#app {
@@ -125,26 +131,6 @@
 			}
 		}
 
-		& .action {
-			padding: 0.5rem;
-
-			& button {
-				padding: 0.725rem 1.25rem;
-				margin-right: 1rem;
-				text-transform: uppercase;
-				font-weight: bold;
-				border: none;
-				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-				border-radius: 0.125rem;
-				background: #4361ee;
-				color: #fff;
-				letter-spacing: 0.125rem;
-				cursor: pointer;
-
-				&:hover {
-					background: #2a40a2;
-				}
-			}
-		}
+		
 	}
 </style>
