@@ -33,7 +33,6 @@
 		},
 		created() {
 			eventBus.$on('add-msg', msg => this.addMsg(msg));
-			// eventBus.$on('forward-msg', msg => this.addMsg(msg));
 			eventBus.$on('delete-msg', id => this.deleteMsg(id));
 
 			eventBus.$on('close-form', payload => (this.showForm = payload));
@@ -42,10 +41,8 @@
 				this.forward = false;
 			});
 			eventBus.$on('forward-btn', payload => {
-				this.$nextTick(() => {
-					this.showForm = payload;
-					this.forward = payload;
-				});
+				this.showForm = payload;
+				this.forward = payload;
 			});
 		},
 		beforeDestroy() {
@@ -54,7 +51,7 @@
 
 			eventBus.$off('close-form');
 			eventBus.$off('reply-btn');
-			// eventBus.$off('forward-btn');
+			eventBus.$off('forward-btn');
 		},
 		async mounted() {
 			try {
@@ -107,48 +104,5 @@
 		padding: 1rem;
 		margin: 0 auto;
 		overflow-wrap: break-word;
-
-		& .header {
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-
-			& span {
-				font-weight: bold;
-			}
-		}
-
-		& .msg-wrapper {
-			margin-top: 2rem;
-		}
-
-		& .msg-item {
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.125);
-			border: 1px solid rgba(0, 0, 0, 0.1);
-			margin-bottom: 1rem;
-			border-radius: 1rem;
-			padding: 1rem;
-
-			& span {
-				font-weight: bold;
-			}
-
-			&__from {
-				display: flex;
-				justify-content: space-between;
-
-				& .delete {
-					cursor: pointer;
-					color: firebrick;
-
-					&:hover {
-						color: rgb(218, 21, 21);
-					}
-				}
-			}
-		}
 	}
 </style>

@@ -28,4 +28,14 @@
 	};
 </script>
 
-<style></style>
+<style lang="scss">
+	.header {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+
+		& span {
+			font-weight: bold;
+		}
+	}
+</style>

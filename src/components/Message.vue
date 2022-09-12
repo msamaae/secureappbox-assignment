@@ -27,8 +27,8 @@
 		},
 		methods: {
 			deleteMsg(id) {
-                eventBus.$emit('delete-msg', id);
-            },
+				eventBus.$emit('delete-msg', id);
+			},
 			handleMsgBody(str) {
 				if (str) {
 					return str.replace(/\[([^\][]+)]/g, '<$1>');
@@ -38,4 +38,37 @@
 	};
 </script>
 
-<style></style>
+<style lang="scss">
+	.msg-wrapper {
+		margin-top: 2rem;
+
+		& .msg-item {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.125);
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			margin-bottom: 1rem;
+			border-radius: 1rem;
+			padding: 1rem;
+
+			& span {
+				font-weight: bold;
+			}
+
+			&__from {
+				display: flex;
+				justify-content: space-between;
+
+				& .delete {
+					cursor: pointer;
+					color: firebrick;
+
+					&:hover {
+						color: rgb(218, 21, 21);
+					}
+				}
+			}
+		}
+	}
+</style>
