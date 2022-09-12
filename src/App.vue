@@ -58,11 +58,10 @@
 				const { data } = await axios.get(
 					'http://sa-test-task-2022.s3-website.eu-north-1.amazonaws.com/messages'
 				);
-				console.log(data);
 				this.messages = data;
 			} catch (error) {
-				console.error(error);
-				throw error;
+				console.error(1234, error);
+				// throw error;
 			}
 		},
 

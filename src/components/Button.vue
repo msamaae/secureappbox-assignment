@@ -14,7 +14,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	button {
 		padding: 0.725rem 1.25rem;
 		margin-right: 1rem;

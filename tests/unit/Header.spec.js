@@ -13,10 +13,6 @@ describe('Header.vue', () => {
 		});
 	});
 
-	test('sanity test', () => {
-		expect(true).toBe(true);
-	});
-
 	it('exists', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
