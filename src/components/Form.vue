@@ -71,7 +71,7 @@
 						messageId: this.msgId(),
 						from: this.from,
 						to: this.to,
-						subject: `Re(${this.message.conversationHistory.length}): The iPhone 14 and 14 Plus are official`,
+						subject: `Re(${this.message.conversationHistory.length + 1}): The iPhone 14 and 14 Plus are official`,
 						body: '<br>-----Forwarded message-----<br>' + this.body,
 					});
 				} else {
@@ -79,7 +79,7 @@
 						messageId: this.msgId(),
 						from: this.from,
 						to: this.to,
-						subject: `Re(${this.message.conversationHistory.length}): The iPhone 14 and 14 Plus are official`,
+						subject: `Re(${this.message.conversationHistory.length + 1}): The iPhone 14 and 14 Plus are official`,
 						body: this.body,
 					});
 				}
