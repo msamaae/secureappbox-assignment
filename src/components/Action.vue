@@ -1,7 +1,7 @@
 <template>
 	<div class="action">
 		<button class="action__reply" @click="handleReply">Reply</button>
-		<button class="action__forward" @click="forwardMsg">Forward</button>
+		<button class="action__forward" @click="handleForward">Forward</button>
 	</div>
 </template>
 
@@ -10,17 +10,12 @@
 
 	export default {
 		name: 'Action',
-		data() {
-			return {
-                forward: false
-			};
-		},
 		methods: {
 			handleReply() {
                 eventBus.$emit('reply-btn', true);
             },
-            forwardMsg() {
-                
+            handleForward() {
+                eventBus.$emit('forward-btn', true);
             }
 		},
 	};

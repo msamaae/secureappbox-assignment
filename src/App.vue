@@ -2,7 +2,7 @@
 	<div id="app" class="wrapper">
 		<Header :message="messages" />
 		<Message :messages="messages.conversationHistory" />
-		<Form v-if="showForm" :message="messages" />
+		<Form v-if="showForm" :message="messages" :forward="forward" />
 		<Action v-show="!showForm" />
 	</div>
 </template>
@@ -27,20 +27,34 @@
 		data() {
 			return {
 				messages: [],
-                showForm: false
+				showForm: false,
+				forward: false,
 			};
 		},
 		created() {
+			eventBus.$on('add-msg', msg => this.addMsg(msg));
+			// eventBus.$on('forward-msg', msg => this.addMsg(msg));
 			eventBus.$on('delete-msg', id => this.deleteMsg(id));
-			eventBus.$on('reply-msg', msg => this.replyMsg(msg));
-			eventBus.$on('reply-btn', payload => this.showForm = payload);
-			eventBus.$on('close-form', payload => this.showForm = payload);
+
+			eventBus.$on('close-form', payload => (this.showForm = payload));
+			eventBus.$on('reply-btn', payload => {
+				this.showForm = payload;
+				this.forward = false;
+			});
+			eventBus.$on('forward-btn', payload => {
+				this.$nextTick(() => {
+					this.showForm = payload;
+					this.forward = payload;
+				});
+			});
 		},
 		beforeDestroy() {
+			eventBus.$off('add-msg');
 			eventBus.$off('delete-msg');
-			eventBus.$off('reply-msg');
-			eventBus.$off('reply-btn');
+
 			eventBus.$off('close-form');
+			eventBus.$off('reply-btn');
+			// eventBus.$off('forward-btn');
 		},
 		async mounted() {
 			try {
@@ -56,9 +70,9 @@
 		},
 
 		methods: {
-			replyMsg(msg) {
-                this.messages.conversationHistory.push(msg);
-            },
+			addMsg(msg) {
+				this.messages.conversationHistory.push(msg);
+			},
 			deleteMsg(id) {
 				const found = this.messages.conversationHistory.map(msg => msg.messageId).indexOf(id);
 
@@ -136,7 +150,5 @@
 				}
 			}
 		}
-
-		
 	}
 </style>
