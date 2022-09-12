@@ -6,4 +6,4 @@
 - [x] It should add a message
 - [x] It should forward a message
 - [x] It should delete a message 
-- [] It should have unit tests
+- [x] It should have unit tests

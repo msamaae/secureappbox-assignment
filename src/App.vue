@@ -60,8 +60,8 @@
 				);
 				this.messages = data;
 			} catch (error) {
-				console.error(1234, error);
-				// throw error;
+				console.error( error);
+				throw error;
 			}
 		},
 
@@ -71,7 +71,6 @@
 			},
 			deleteMsg(id) {
 				const found = this.messages.conversationHistory.map(msg => msg.messageId).indexOf(id);
-
 				this.messages.conversationHistory.splice(found, 1);
 			},
 		},
